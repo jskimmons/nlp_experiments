@@ -9,15 +9,15 @@ import pandas as pd
 import nltk
 import ssl
 
-# used to download nltk stuff
-# try:
-#     _create_unverified_https_context = ssl._create_unverified_context
-# except AttributeError:
-#     pass
-# else:
-#     ssl._create_default_https_context = _create_unverified_https_context
+# used to download nltk stuff and get around error I was getting 
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
 
-# nltk.download('wordnet')
+nltk.download('wordnet')
 
 stemmer = SnowballStemmer("english")
 
@@ -37,7 +37,7 @@ def preprocess(text):
 # iterate through all given messages and preprocess them
 processed_msgs = []
 
-for l in open('general_text.txt', 'r'):
+for l in open('../data/general_text.txt', 'r'):
     l = l.strip()
     p = preprocess(l)
     if p:
@@ -67,9 +67,9 @@ for idx, topic in lda_model.print_topics(-1):
 
 unseen_document = "We should put that in the pitch deck"
 
-print(preprocess(unseen_document))
+# print(preprocess(unseen_document))
 
-# bow_vector = dictionary.doc2bow(preprocess(unseen_document))
+bow_vector = dictionary.doc2bow(preprocess(unseen_document))
 
-# for index, score in sorted(lda_model[bow_vector], key=lambda tup: -1*tup[1]):
-#     print("Score: {}\t Topic: {}".format(score, lda_model.print_topic(index, 5)))
+for index, score in sorted(lda_model[bow_vector], key=lambda tup: -1*tup[1]):
+    print("Score: {}\t Topic: {}".format(score, lda_model.print_topic(index, 5)))

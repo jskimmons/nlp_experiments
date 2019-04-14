@@ -33,7 +33,7 @@ def preprocess(text):
 # iterate through all given messages and preprocess them
 processed_msgs = []
 
-for l in open('general_text.txt', 'r'):
+for l in open('../data/general_text.txt', 'r'):
     l = l.strip()
     p = preprocess(l)
     if p:
@@ -43,19 +43,19 @@ dictionary = gensim.corpora.Dictionary(processed_msgs)
 
 # print(dictionary)
 
-exists = os.path.isfile("/word2vec.model")
-if not exists:
-    path = get_tmpfile("word2vec.model")
-    bigram_transformer = Phrases(processed_msgs)
-    model = Word2Vec(bigram_transformer[processed_msgs], min_count=1)
-    model.save("word2vec.model")
-else:
-    model = Word2Vec.load("word2vec.model")
+# exists = os.path.isfile("../models/word2vec.model")
+# if not exists:
+#     path = get_tmpfile("word2vec.model")
+#     bigram_transformer = Phrases(processed_msgs)
+#     model = Word2Vec(bigram_transformer[processed_msgs], min_count=1)
+#     model.save("word2vec.model")
+# else:
+#     model = Word2Vec.load("word2vec.model")
 
 
-# w2v_corpus = model.wv
-# print(w2v_corpus.vocab)
-# del model
+bigram_transformer = Phrases(processed_msgs)
+model = Word2Vec(bigram_transformer[processed_msgs], min_count=1)
+# model.save("../models/word2vec.model")
 
 
 X = model[model.wv.vocab]
